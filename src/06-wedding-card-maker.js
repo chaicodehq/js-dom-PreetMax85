@@ -67,13 +67,118 @@
  *   // => [{ name: "Priya", side: "bride" }]
  */
 export function setupGuestList(containerElement) {
-  // Your code here
+  if (containerElement == null) return null
+  containerElement.addEventListener("click", event => {
+    let element = event.target
+    let parent = event.target.closest('.guest-item')
+    if (element.classList.contains('remove-btn')) {
+      parent.remove()
+    }
+  })
+  const guestList = {
+    addGuest(name, side) {
+      let guest = document.createElement('div')
+      guest.classList.add('guest-item')
+      guest.setAttribute('data-name', name)
+      guest.setAttribute('data-side', side)
+
+      let text = document.createElement('span')
+      text.textContent = name
+      guest.appendChild(text)
+
+      let btn = document.createElement('button')
+      btn.classList.add('remove-btn')
+      btn.textContent = "Remove"
+      guest.appendChild(btn)
+
+      containerElement.appendChild(guest)
+      return guest
+    },
+
+    removeGuest(name) {
+      let guestToRemove = [...containerElement.children].find(child => child.getAttribute('data-name') === name)
+      if (!guestToRemove) return false
+      containerElement.removeChild(guestToRemove)
+      return true
+    },
+
+    getGuests() {
+      let children = [...containerElement.children]
+      let guests = children.map(child => {
+        let name = child.getAttribute('data-name')
+        let side = child.getAttribute('data-side')
+        return {
+          name,
+          side
+        }
+      })
+
+      return guests
+    }
+  }
+
+  return guestList
 }
 
 export function setupThemeSelector(containerElement, previewElement) {
-  // Your code here
+  if (containerElement == null || previewElement == null) return null
+
+  const themes = ['traditional', 'modern', 'royal']
+  themes.forEach(theme => {
+    let btn = document.createElement('button')
+    btn.classList.add('theme-btn')
+    btn.textContent = theme
+    btn.setAttribute('data-theme', theme)
+    containerElement.appendChild(btn)
+  })
+
+  containerElement.addEventListener('click', (event) => {
+    let themeName = event.target.textContent
+    previewElement.className = themeName
+    previewElement.setAttribute('data-theme', themeName)
+  })
+
+
+  let themeObject = {
+    getTheme() {
+      return previewElement.getAttribute('data-theme') || null
+    }
+  }
+
+  return themeObject
 }
 
 export function setupCardEditor(cardElement) {
-  // Your code here
+  if (cardElement == null) return null
+  const clearEditing = () => {
+    let current = cardElement.querySelector('.editing')
+    if (current) {
+      current.classList.remove('editing')
+      current.contentEditable = 'inherit'
+    }
+  }
+
+  cardElement.addEventListener("click", (event) => {
+    let editable = event.target.closest('[data-editable]')
+    if (editable) {
+      clearEditing()
+
+      editable.contentEditable = "true"
+      editable.classList.add('editing')
+
+    } else {
+      clearEditing()
+    }
+  })
+
+  const contentObject = {
+    getContent(field) {
+      let editableElement = [...cardElement.children].find(child => child.getAttribute('data-editable') === field)
+      if (!editableElement) return null
+      return editableElement.textContent
+    }
+  }
+
+  return contentObject
+
 }
