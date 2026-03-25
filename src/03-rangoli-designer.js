@@ -70,25 +70,63 @@
  *   // => ["red", "blue"]
  */
 export function addColors(element, ...colors) {
-  // Your code here
+  if (element === null || element === undefined) return -1
+  let count = 0
+  for (let i = 0; i < colors.length; i++) {
+    if (!element.classList.contains(colors[i])) {
+      element.classList.add(colors[i])
+      count++
+    }
+  }
+  return count;
 }
 
 export function removeColors(element, ...colors) {
-  // Your code here
+  if (element === null || element === undefined) return -1
+  let count = 0
+  for (let i = 0; i < colors.length; i++) {
+    if (element.classList.contains(colors[i])) {
+      element.classList.remove(colors[i])
+      count++
+    }
+  }
+
+  return count;
+
 }
 
 export function togglePattern(element, pattern) {
-  // Your code here
+  if (element === null || element === undefined) return null
+  return element.classList.toggle(`pattern-${pattern}`)
+
 }
 
 export function hasDesign(element, designName) {
-  // Your code here
+  if (element === null || element === undefined) return false
+  return element.classList.contains(`design-${designName}`)
+
 }
 
 export function replaceDesign(element, oldDesign, newDesign) {
-  // Your code here
+  if (element === null || element === undefined) return false
+  let oldDesignPresent = element.classList.contains(`design-${oldDesign}`)
+  element.classList.remove(`design-${oldDesign}`)
+  element.classList.add(`design-${newDesign}`)
+
+return oldDesignPresent
 }
 
 export function getActiveColors(element) {
-  // Your code here
+  if (element === null || element === undefined) return []
+  let activeColors = [];
+  const multipleClasses = [...element.classList];
+  multipleClasses.forEach(c => {
+    if (c.startsWith("color-")) {
+      let colorName = c.replace("color-", "")
+      activeColors.push(colorName)
+    }
+  })
+
+  return activeColors
+
 }
