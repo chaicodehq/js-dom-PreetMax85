@@ -87,29 +87,59 @@
  *   // => { total: 2, waiting: 1, serving: 1, completed: 0 }
  */
 export function findQueueContainer(element) {
-  // Your code here
+  if (element == null) return null
+  return element.closest('.queue-container')
 }
 
 export function getNextInQueue(element) {
-  // Your code here
+  return element?.nextElementSibling || null
 }
 
 export function getPreviousInQueue(element) {
-  // Your code here
+  if (element == null) return null
+  let previousElement = element.previousElementSibling
+  if (previousElement) {
+    return previousElement
+  } else {
+    return null
+  }
+
 }
 
 export function getQueuePosition(element) {
-  // Your code here
+  if (element == null) return -1
+  let parent = element.parentNode
+  if (!parent) return -1
+
+  let children = [...parent.children]
+  let index = children.indexOf(element)
+  return (index + 1)
 }
 
 export function moveToFront(element) {
-  // Your code here
+  if (element == null) return false
+  let parent = element.parentNode
+  if (!parent) return false
+  if (element === parent.children[0]) return false
+  let insertElement = parent.insertBefore(element, parent.firstChild)
+  if (insertElement) return true
 }
 
 export function removeFromQueue(element) {
-  // Your code here
+  if (element == null) return null
+  let parent = element.parentNode
+  if (!parent) return null
+  let removedElement = parent.removeChild(element)
+  return removedElement
 }
 
 export function getQueueStats(queueContainer) {
-  // Your code here
+  if (!queueContainer) return null
+  return {
+    total: queueContainer.childElementCount,
+    waiting: queueContainer.querySelectorAll(':scope > .waiting').length,
+    serving: queueContainer.querySelectorAll(':scope > .serving').length,
+    completed: queueContainer.querySelectorAll(':scope > .completed').length
+  };
+
 }
