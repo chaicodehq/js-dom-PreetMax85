@@ -89,25 +89,63 @@
  *   // => deep clone of stage with id "stage-clone"
  */
 export function insertDancer(stage, newDancer, referenceDancer) {
-  // Your code here
+  if (stage == null || newDancer == null) return false
+  if (referenceDancer == null) {
+    stage.append(newDancer)
+    return true
+  }
+  let insertedNode = stage.insertBefore(newDancer, referenceDancer)
+  if (insertedNode) return true
 }
 
 export function cloneDancer(dancer, deep) {
-  // Your code here
+  if (dancer == null) return null
+  const clone = dancer.cloneNode(deep)
+  if (dancer.hasAttribute('id')) {
+    const currentId = clone.getAttribute('id')
+    const newId = currentId + "-copy"
+    clone.setAttribute('id', newId)
+  }
+  return clone
 }
 
 export function replaceDancer(stage, oldDancer, newDancer) {
-  // Your code here
+  if (stage == null || oldDancer == null || newDancer == null) return null
+  return stage.replaceChild(newDancer, oldDancer)
+
 }
 
 export function removeDancer(stage, dancer) {
-  // Your code here
+  if (stage == null || dancer == null) return null
+  if (dancer.parentNode !== stage) return null
+
+  return stage.removeChild(dancer)
 }
 
 export function rearrangeStage(stage, order) {
-  // Your code here
+  if (stage == null || !Array.isArray(order)) return false
+  for (const index of order) {
+    if (typeof index !== "number" || index >= order.length || index < 0) return false
+  }
+  let children = [...stage.children]
+  if (order.length !== children.length) return false
+  stage.replaceChildren();
+  order.forEach(index => {
+    let childToInsert = children[index]
+    stage.appendChild(childToInsert)
+  });
+  return true
+
 }
 
 export function duplicateFormation(stage) {
-  // Your code here
+  if (stage == null) return null
+  const deepClone = stage.cloneNode(true)
+  if (stage.hasAttribute('id')) {
+    const currentId = deepClone.getAttribute('id')
+    const newId = currentId + "-clone"
+    deepClone.setAttribute('id', newId)
+  }
+  return deepClone
+
 }
